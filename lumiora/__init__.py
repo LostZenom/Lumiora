@@ -18,7 +18,7 @@ or from the command line:
     python -m lumiora.web my-app
 """
 
-__version__ = "2.0.0"
+__version__ = "2.1.0"
 
 __all__ = ["web", "__version__"]
 

@@ -72,7 +72,20 @@ or from the command line:
 python -m lumiora.web --demo
 ```
 
-**Run an exported layout as a desktop app:**
+**Try the example in this repo** (a real LUMIORA Builder export — one window,
+full Lumiora widget set):
+
+```bash
+git clone https://github.com/LostZenom/Lumiora.git
+cd Lumiora
+python -m lumiora.web examples      # or: pip install . then lumiora.web.run("examples")
+```
+
+That opens `examples/L.py` **exactly like running the file itself**
+(`python examples/L.py`) — same window, same per-window page, same working
+minimize / maximize / close.
+
+**Run any exported layout as a desktop app:**
 
 ```bash
 lumiora.web.run("path/to/exported-app")   # python
@@ -103,6 +116,14 @@ my-app/
 A folder without extra metadata opens as a **single desktop window**, sized
 to the layout's design size (the builder stamps `width`/`height` on its
 window element; otherwise it defaults to 960×640).
+
+> **Builder exports open exactly like their own `main.py`.** LUMIORA Builder
+> downloads a zip containing `main.py` (or `L.py`), `index.html` and
+> `run_web.py`. Point `run()` at that folder and it detects the exported
+> launcher, reads its embedded per-window desktop pages (parsed with the
+> AST — the file is never executed) and opens each one with its real window
+> chrome — pixel-identical to running `python main.py` yourself, without
+> the giant self-contained file.
 
 ### Multi-window apps (`windows.json`)
 
@@ -175,6 +196,8 @@ SDK headers and is verified end-to-end against the real runtime.
 lumiora/
 ├── __init__.py     # `import lumiora.web`
 └── web.py          # the whole launcher: server + WebView2 desktop host
+examples/
+└── L.py            # a real LUMIORA Builder export — try `python -m lumiora.web examples`
 pyproject.toml
 README.md
 ```
