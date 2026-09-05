@@ -1,0 +1,13 @@
+# Python
+__pycache__/
+*.pyc
+*.egg-info/
+build/
+dist/
+
+# the WebView2 loader is written next to the served folder on first run
+WebView2Loader.dll
+
+# OS
+.DS_Store
+Thumbs.db
