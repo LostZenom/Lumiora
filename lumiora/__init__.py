@@ -10,15 +10,21 @@ localhost browser server, so it works on any OS with zero dependencies.
 
     lumiora.web.demo()            # built-in sample app (two windows)
     lumiora.web.run("my-app")     # layout folder -> real desktop app
+    lumiora.web.open_app(...)     # in-memory windows+pages -> desktop app
     lumiora.web.serve("my-app")   # same layout -> plain browser server
 
 or from the command line:
 
     python -m lumiora.web --demo
     python -m lumiora.web my-app
+
+LUMIORA Builder exports are thin launchers built on this: their main.py
+holds the layout (per-window specs, HTML pages, css) and hands it to
+``lumiora.web.open_app``, so every window opens as its own real desktop
+window with working drag / minimize / maximize / close.
 """
 
-__version__ = "2.2.0"
+__version__ = "2.3.0"
 
 __all__ = ["web", "__version__"]
 

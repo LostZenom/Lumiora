@@ -46,8 +46,8 @@ import threading
 import time
 import webbrowser
 
-__version__ = "2.2.0"
-__all__ = ["serve", "run", "demo", "__version__"]
+__version__ = "2.3.0"
+__all__ = ["serve", "run", "open_app", "demo", "__version__"]
 
 DEFAULT_PORT = 5200
 
@@ -1160,6 +1160,51 @@ def serve(directory=".", port=None, open_browser=True, no_open=False):
     print()
     if open_browser and not no_open:
         webbrowser.open(url + "/")
+    try:
+        while True:
+            time.sleep(3600)
+    except KeyboardInterrupt:
+        print()
+        print("  stopped.")
+    httpd.shutdown()
+
+
+def open_app(root, title, windows, pages, style_css=None, port=None,
+             open_browser=True, no_open=False):
+    """Open an in-memory layout as a REAL desktop app (WebView2).
+
+    This is the engine behind slim LUMIORA Builder exports: ``windows`` is
+    the per-window spec list, ``pages`` the matching per-window HTML strings
+    (``WINDOW_PAGES``), ``style_css`` the design css served at /style.css.
+    ``root`` is the export folder — real files (assets/) are served from it
+    and the WebView2Loader.dll is written there on first run. Blocks until
+    every window is closed; falls back to opening ``root/index.html`` in the
+    browser when the desktop host can't start.
+    """
+    root = pathlib.Path(root or os.getcwd()).resolve()
+    _APP.update(title=str(title or "Lumiora"), root=root,
+                windows=list(windows), pages=list(pages), style_css=style_css,
+                full_file=None)
+    httpd = _start_server(_ready_port(port))
+    server_ready = threading.Event()
+    server_ready.set()
+    port = httpd.server_address[1]
+    url = f"http://localhost:{port}"
+    print()
+    print(f"  LUMIORA — {_APP['title']}")
+    print(f"  {url}")
+    print("  Ctrl+C to stop")
+    print()
+    if run_desktop(_APP["windows"], port, server_ready, str(root)):
+        httpd.shutdown()
+        return
+    print("  No desktop host available — opened your layout in the browser instead.")
+    print("  (Desktop windows need the WebView2 runtime, which ships")
+    print("   with Windows 11.)")
+    print()
+    page = root / "index.html"
+    if open_browser and not no_open and page.is_file():
+        webbrowser.open(page.resolve().as_uri())
     try:
         while True:
             time.sleep(3600)

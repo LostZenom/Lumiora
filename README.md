@@ -28,9 +28,11 @@ like a website:
 
 - **Frameless, transparent windows** — the page fills a borderless window at
   exactly the size you designed; rounded corners and glows stay real because
-  the window is per-pixel transparent.
-- **Working window controls** — hover the top-right corner for minimize /
+  the window is per-pixel transparent.- **Working window controls** — hover the top-right corner for minimize /
   maximize / close, or drag anywhere to move the window.
+- **Slim exports** — LUMIORA Builder exports are tiny `main.py` launchers
+  (`import lumiora.web`); the heavy host lives here in the package, not
+  embedded in every generated file.
 - **The WebView2 runtime ships with Windows 11** — so the desktop app needs
   **no pip packages and no downloads**. The tiny native host embedded in the
   module is pure Python stdlib (ctypes → WebView2 + DirectComposition).
@@ -38,8 +40,9 @@ like a website:
   back to serving the exact layout in your browser (any OS, zero
   dependencies). `serve()` is the always-browser mode.
 
-This is the same launcher LUMIORA Builder exports embed in its generated
-`main.py` — packaged here as a reusable library.
+This is the engine behind LUMIORA Builder's exports: generated `main.py`
+files are slim launchers that embed the layout (per-window pages + css) and
+hand it to `lumiora.web.open_app(...)`.
 
 ---
 
@@ -86,10 +89,11 @@ Both open **exactly like running the export files themselves** — same
 windows, same pages, same working minimize / maximize / close. The
 calculator is a real, interactive demo: click its keys and it calculates.
 
-You can also run the exports directly:
+You can also run the export files directly (they import `lumiora.web` —
+install it first with `pip install .` from this repo, or `pip install lumiora`):
 
 ```bash
-python examples/calculator.py   # self-contained — no lumiora install needed
+python examples/calculator.py
 python examples/L.py
 ```
 
@@ -126,12 +130,12 @@ to the layout's design size (the builder stamps `width`/`height` on its
 window element; otherwise it defaults to 960×640).
 
 > **Builder exports open exactly like their own `main.py`.** LUMIORA Builder
-> downloads a zip containing `main.py` (or `L.py`), `index.html` and
-> `run_web.py`. Point `run()` at that folder and it detects the exported
-> launcher, reads its embedded per-window desktop pages (parsed with the
-> AST — the file is never executed) and opens each one with its real window
-> chrome — pixel-identical to running `python main.py` yourself, without
-> the giant self-contained file.
+> downloads a zip containing `main.py`, `index.html` and `run_web.py`. That
+> `main.py` is a slim launcher: the layout's per-window pages + css are
+> embedded in the file and handed to `lumiora.web.open_app(...)`, which opens
+> each one with its real window chrome. Point `run()` at an export folder and
+> it detects the launcher and opens the same windows — pixel-identical to
+> running `python main.py` yourself.
 
 ### Multi-window apps (`windows.json`)
 

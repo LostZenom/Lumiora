@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "lumiora"
-version = "2.2.0"
+version = "2.3.0"
 description = "lumiora.web — open HTML layouts as real desktop apps. Frameless, per-pixel-transparent WebView2 windows (DirectComposition), pure Python stdlib, with a browser fallback."
 readme = "README.md"
 requires-python = ">=3.9"
