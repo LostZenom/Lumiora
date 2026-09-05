@@ -72,18 +72,26 @@ or from the command line:
 python -m lumiora.web --demo
 ```
 
-**Try the example in this repo** (a real LUMIORA Builder export — one window,
-full Lumiora widget set):
+**Try the demos in this repo** (real LUMIORA Builder exports):
 
 ```bash
 git clone https://github.com/LostZenom/Lumiora.git
 cd Lumiora
-python -m lumiora.web examples      # or: pip install . then lumiora.web.run("examples")
+
+python -m lumiora.web examples                  # opens the Lumiora widget showcase
+python -m lumiora.web examples/calculator.py    # opens the calculator demo
 ```
 
-That opens `examples/L.py` **exactly like running the file itself**
-(`python examples/L.py`) — same window, same per-window page, same working
-minimize / maximize / close.
+Both open **exactly like running the export files themselves** — same
+windows, same pages, same working minimize / maximize / close. The
+calculator is a real, interactive demo: click its keys and it calculates.
+
+You can also run the exports directly:
+
+```bash
+python examples/calculator.py   # self-contained — no lumiora install needed
+python examples/L.py
+```
 
 **Run any exported layout as a desktop app:**
 
@@ -197,7 +205,8 @@ lumiora/
 ├── __init__.py     # `import lumiora.web`
 └── web.py          # the whole launcher: server + WebView2 desktop host
 examples/
-└── L.py            # a real LUMIORA Builder export — try `python -m lumiora.web examples`
+├── L.py            # the Lumiora widget showcase export
+└── calculator.py   # the calculator demo export
 pyproject.toml
 README.md
 ```
